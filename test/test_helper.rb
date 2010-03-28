@@ -22,6 +22,7 @@ require 'redgreen'
 require 'construct'
 require 'git'
 require 'time'
+require 'grancher'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 require 'jeweler'
@@ -157,7 +158,46 @@ class Test::Unit::TestCase
 
       context "", &block
     end
+  end
 
+  def self.ghpages_command_context(description, &block)
+    context description do
+      setup do
+
+        @repo           = Object.new
+        @version_helper = Object.new
+        @gemspec        = Object.new
+        @commit         = Object.new
+        @version        = Object.new
+        @output         = Object.new
+        @base_dir       = Object.new
+        @gemspec_helper = Object.new
+        @rubyforge      = Object.new
+
+        @jeweler        = Object.new
+
+        stub(@jeweler).repo           { @repo }
+        stub(@jeweler).version_helper { @version_helper }
+        stub(@jeweler).gemspec        { @gemspec }
+        stub(@jeweler).commit         { @commit }
+        stub(@jeweler).version        { @version }
+        stub(@jeweler).output         { @output }
+        stub(@jeweler).gemspec_helper { @gemspec_helper }
+        stub(@jeweler).base_dir       { @base_dir }
+        stub(@jeweler).rubyforge      { @rubyforge }
+
+        @ghpages_task   = Object.new
+        
+        stub(@ghpages_task).jeweler     { @jeweler }
+        stub(@ghpages_task).push_on_release  { @push_on_release }
+        stub(@ghpages_task).doc_task    { @doc_task }
+        stub(@ghpages_task).keep_files  { @keep_files }
+        stub(@ghpages_task).user_github_com   { @user_github_com }
+        stub(@ghpages_task).map_paths   { @map_paths }
+      end
+
+      context "", &block
+    end
   end
 
   def stub_git_config(options = {})

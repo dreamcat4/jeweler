@@ -1,4 +1,4 @@
-
+ 
 class Jeweler
   class Generator
     class Options < Hash
@@ -122,6 +122,10 @@ class Jeweler
 
           o.on('--rdoc', 'use rdoc for documentation') do
             self[:documentation_framework] = :rdoc
+          end
+
+          o.on('--ghpages', 'push documentation to ghpages') do
+            self[:ghpages] = true
           end
 
           o.on_tail('-h', '--help', 'display this help and exit') do

@@ -1,5 +1,5 @@
 require 'test_helper'
-
+ 
 class TestJeweler < Test::Unit::TestCase
 
   def build_jeweler(base_dir = nil)
@@ -132,6 +132,28 @@ class TestJeweler < Test::Unit::TestCase
     mock(Jeweler::Commands::Version::Write).build_for(jeweler) { command }
 
     jeweler.write_version(1, 5, 2, 'a1')
+  end
+
+  should "build and run release docs to ghpages command when running release_docs_to_ghpages" do
+    jeweler = build_jeweler
+    ghpages_task = Jeweler::GhpagesTasks.new
+
+    command = Object.new
+    mock(command).run
+    mock(Jeweler::Commands::Ghpages::ReleaseToGhpages).build_for(jeweler,ghpages_task) { command }
+
+    jeweler.release_docs_to_ghpages(ghpages_task)
+  end
+
+  should "build and run remove docs from ghpages command when running remove_docs_from_ghpages" do
+    jeweler = build_jeweler
+    ghpages_task = Jeweler::GhpagesTasks.new
+    
+    command = Object.new
+    mock(command).run
+    mock(Jeweler::Commands::Ghpages::RemoveFromGhpages).build_for(jeweler,ghpages_task) { command }
+
+    jeweler.remove_docs_from_ghpages(ghpages_task) 
   end
 
   should "build and run release to github command when running release_gem_to_github" do

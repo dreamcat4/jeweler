@@ -1,9 +1,9 @@
 class Jeweler
   class Generator
-    module DocumentationFrameworks
-      Generator.class_option :documentation_framework, :type => :string, :default => 'rdoc',
-        :desc => 'documentation framework to generate'
+    class_option :yard, :type => :boolean, :default => false,
+      :desc => 'use yard for documentation (default is rdoc)'
 
+    module DocumentationFrameworks
       def self.klass(documentation_framework)
         documentation_framework_class_name = documentation_framework.to_s.capitalize
         if DocumentationFrameworks.const_defined?(documentation_framework_class_name)

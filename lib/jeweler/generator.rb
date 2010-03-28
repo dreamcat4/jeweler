@@ -11,7 +11,7 @@ require 'pathname'
 require 'thor/actions/git_init'
 require 'thor/actions/git_remote'
 require 'thor/actions/github_repo'
-
+ 
 class Jeweler
   class NoGitUserName < StandardError
   end
@@ -42,6 +42,7 @@ class Jeweler
     require 'jeweler/generator/default'
     require 'jeweler/generator/bundler'
     require 'jeweler/generator/documentation_frameworks'
+    require 'jeweler/generator/ghpages'
     require 'jeweler/generator/testing_frameworks'
     require 'jeweler/generator/cucumber'
     require 'jeweler/generator/reek'
@@ -52,7 +53,8 @@ class Jeweler
     attr_accessor :user_name, :user_email, :summary, :homepage,
                   :description, :project_name, :github_username, :github_token,
                   :repo, :should_create_remote_repo, 
-                  :testing_framework_base,
+                  :testing_framework, :documentation_framework,
+                  :testing_framework_base, :documentation_framework_base,
                   :git_remote,
                   :plugins
 
@@ -105,21 +107,24 @@ class Jeweler
       self.user_email   = options[:user_email]
       self.homepage     = options[:homepage]
       self.git_remote   = options[:git_remote]
+      self.testing_framework       = options[:testing_framework]
+      self.documentation_framework = options[:yard] ? "yard" : "rdoc"
 
       raise NoGitUserName unless self.user_name
       raise NoGitUserEmail unless self.user_email
 
       self.plugins                  = []
 
-      self.testing_framework_base = TestingFramework.klass(options[:testing_framework]).new(self)
-      documentation_framework_base = DocumentationFrameworks.klass(options[:documentation_framework]).new(self)
+      self.testing_framework_base = TestingFramework.klass(self.testing_framework).new(self)
+      self.documentation_framework_base = DocumentationFrameworks.klass(self.documentation_framework).new(self)
 
       plugins << Bundler.new(self)
       plugins << Default.new(self)
       plugins << Rubyforge.new(self) if options[:rubyforge]
       plugins << self.testing_framework_base
-      plugins << documentation_framework_base
       plugins << Cucumber.new(self, testing_framework_base) if options[:cucumber]
+      plugins << self.documentation_framework_base
+      plugins << Ghpages.new(self, documentation_framework) if options[:ghpages]
       plugins << Reek.new(self) if options[:reek]
       plugins << Roodi.new(self) if options[:roodi]
       plugins << GitVcs.new(self)
@@ -136,7 +141,7 @@ class Jeweler
         github_repo :login => options[:github_username],
                     :token => options[:github_token],
                     :description => options[:description],
-                    :name => options[:project_name]
+                    :name => self.project_name
       end
     end
 

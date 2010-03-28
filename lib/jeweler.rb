@@ -1,5 +1,5 @@
 require 'date'
-
+ 
 # A Jeweler helps you craft the perfect Rubygem. Give him a gemspec, and he takes care of the rest.
 #
 # See Jeweler::Tasks for examples of how to get started. Additionally, resources are available on the wiki:
@@ -19,6 +19,7 @@ class Jeweler
 
   autoload :Tasks,          'jeweler/tasks'
   autoload :GemcutterTasks, 'jeweler/gemcutter_tasks'
+  autoload :GhpagesTasks,   'jeweler/ghpages_tasks'
   autoload :RubyforgeTasks, 'jeweler/rubyforge_tasks'
   autoload :Specification,  'jeweler/specification'
 
@@ -120,6 +121,15 @@ class Jeweler
 
     command.run
   end
+
+  def release_docs_to_ghpages(ghpages_task)
+    Jeweler::Commands::Ghpages::ReleaseToGhpages.build_for(self, ghpages_task).run
+  end
+
+  def remove_docs_from_ghpages(ghpages_task)
+    Jeweler::Commands::Ghpages::RemoveFromGhpages.build_for(self, ghpages_task).run
+  end
+
 
   def release_gem_to_github
     Jeweler::Commands::ReleaseToGithub.build_for(self).run

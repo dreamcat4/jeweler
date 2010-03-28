@@ -26,10 +26,10 @@ class Thor
       end
 
       def invoke_with_conflict_check(&block)
-        if ! exists?
+        if exists?
           base.shell.say_status "git init", "already a git repo", :blue if config[:verbose]
         else
-          say_status 'git init', :green
+          base.shell.say_status "git init", "#{destination}/.git"
           block.call unless pretend?
         end
 

@@ -125,6 +125,17 @@ Feature: generated Rakefile
     And Rakefile does not instantiate a YARD::Rake::YardocTask
     And Rakefile instantiates a Rake::RDocTask.new
 
+  Scenario: ghpages
+    Given I want ghpages
+    When I generate a testunit project named 'the-perfect-gem' that is 'zomg, so good'
+
+    Then Rakefile instantiates a Jeweler::GhpagesTasks.new
+    And Rakefile has false for the Jeweler::GhpagesTasks push_on_release
+    And Rakefile has 'rdoc' for the Jeweler::GhpagesTasks doc_task
+    And Rakefile has [] for the Jeweler::GhpagesTasks keep_files
+    And Rakefile has false for the Jeweler::GhpagesTasks user_github_com
+    And Rakefile has {"rdoc"=>""} for the Jeweler::GhpagesTasks map_paths
+
   Scenario: shindo
     When I generate a shindo project named 'the-perfect-gem' that is 'zomg, so good'
     Then 'Rakefile' requires 'shindo/rake'

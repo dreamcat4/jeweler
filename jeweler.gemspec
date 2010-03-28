@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Nichols"]
-  s.date = %q{2010-02-15}
+  s.date = %q{2010-04-04}
   s.default_executable = %q{jeweler}
   s.description = %q{Simple and opinionated helper for creating Rubygem projects on GitHub}
   s.email = %q{josh@technicalpickles.com}
@@ -17,8 +17,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "ChangeLog.markdown",
     "LICENSE",
-    "README.markdown",
-    "TODO"
+    "README.markdown"
   ]
   s.files = [
     ".gitignore",
@@ -54,6 +53,9 @@ Gem::Specification.new do |s|
     "lib/jeweler/commands.rb",
     "lib/jeweler/commands/build_gem.rb",
     "lib/jeweler/commands/check_dependencies.rb",
+    "lib/jeweler/commands/ghpages/base.rb",
+    "lib/jeweler/commands/ghpages/release_to_ghpages.rb",
+    "lib/jeweler/commands/ghpages/remove_from_ghpages.rb",
     "lib/jeweler/commands/install_gem.rb",
     "lib/jeweler/commands/release_to_gemcutter.rb",
     "lib/jeweler/commands/release_to_git.rb",
@@ -70,19 +72,31 @@ Gem::Specification.new do |s|
     "lib/jeweler/gemspec_helper.rb",
     "lib/jeweler/generator.rb",
     "lib/jeweler/generator/application.rb",
-    "lib/jeweler/generator/bacon_mixin.rb",
+    "lib/jeweler/generator/bundler.rb",
+    "lib/jeweler/generator/cucumber.rb",
+    "lib/jeweler/generator/default.rb",
+    "lib/jeweler/generator/documentation_frameworks.rb",
+    "lib/jeweler/generator/ghpages.rb",
+    "lib/jeweler/generator/git_vcs.rb",
     "lib/jeweler/generator/github_mixin.rb",
-    "lib/jeweler/generator/micronaut_mixin.rb",
-    "lib/jeweler/generator/minitest_mixin.rb",
     "lib/jeweler/generator/options.rb",
-    "lib/jeweler/generator/rdoc_mixin.rb",
-    "lib/jeweler/generator/riot_mixin.rb",
-    "lib/jeweler/generator/rspec_mixin.rb",
-    "lib/jeweler/generator/shindo_mixin.rb",
-    "lib/jeweler/generator/shoulda_mixin.rb",
-    "lib/jeweler/generator/testspec_mixin.rb",
-    "lib/jeweler/generator/testunit_mixin.rb",
-    "lib/jeweler/generator/yard_mixin.rb",
+    "lib/jeweler/generator/plugin.rb",
+    "lib/jeweler/generator/reek.rb",
+    "lib/jeweler/generator/roodi.rb",
+    "lib/jeweler/generator/rubyforge.rb",
+    "lib/jeweler/generator/testing_frameworks.rb",
+    "lib/jeweler/generator/testing_frameworks/bacon.rb",
+    "lib/jeweler/generator/testing_frameworks/base.rb",
+    "lib/jeweler/generator/testing_frameworks/micronaut.rb",
+    "lib/jeweler/generator/testing_frameworks/minitest.rb",
+    "lib/jeweler/generator/testing_frameworks/riot.rb",
+    "lib/jeweler/generator/testing_frameworks/rspec.rb",
+    "lib/jeweler/generator/testing_frameworks/shindo.rb",
+    "lib/jeweler/generator/testing_frameworks/shoulda.rb",
+    "lib/jeweler/generator/testing_frameworks/testspec.rb",
+    "lib/jeweler/generator/testing_frameworks/testunit.rb",
+    "lib/jeweler/generator/testing_frameworks/testunitish.rb",
+    "lib/jeweler/ghpages_tasks.rb",
     "lib/jeweler/rubyforge_tasks.rb",
     "lib/jeweler/specification.rb",
     "lib/jeweler/tasks.rb",
@@ -96,12 +110,10 @@ Gem::Specification.new do |s|
     "lib/jeweler/templates/bacon/helper.rb",
     "lib/jeweler/templates/features/default.feature",
     "lib/jeweler/templates/features/support/env.rb",
-    "lib/jeweler/templates/jeweler_tasks.erb",
     "lib/jeweler/templates/micronaut/flunking.rb",
     "lib/jeweler/templates/micronaut/helper.rb",
     "lib/jeweler/templates/minitest/flunking.rb",
     "lib/jeweler/templates/minitest/helper.rb",
-    "lib/jeweler/templates/other_tasks.erb",
     "lib/jeweler/templates/riot/flunking.rb",
     "lib/jeweler/templates/riot/helper.rb",
     "lib/jeweler/templates/rspec/flunking.rb",
@@ -116,6 +128,9 @@ Gem::Specification.new do |s|
     "lib/jeweler/templates/testunit/flunking.rb",
     "lib/jeweler/templates/testunit/helper.rb",
     "lib/jeweler/version_helper.rb",
+    "lib/thor/actions/git_init.rb",
+    "lib/thor/actions/git_remote.rb",
+    "lib/thor/actions/github_repo.rb",
     "test/fixtures/bar/VERSION.yml",
     "test/fixtures/bar/bin/foo_the_ultimate_bin",
     "test/fixtures/bar/hey_include_me_in_gemspec",
@@ -151,6 +166,9 @@ Gem::Specification.new do |s|
     "test/fixtures/existing-project-with-version-yaml/test/existing_project_with_version_test.rb",
     "test/fixtures/existing-project-with-version-yaml/test/test_helper.rb",
     "test/geminstaller.yml",
+    "test/jeweler/commands/ghpages/test_base.rb",
+    "test/jeweler/commands/ghpages/test_release_to_ghpages.rb",
+    "test/jeweler/commands/ghpages/test_remove_from_ghpages.rb",
     "test/jeweler/commands/test_build_gem.rb",
     "test/jeweler/commands/test_install_gem.rb",
     "test/jeweler/commands/test_release_to_gemcutter.rb",
@@ -174,14 +192,13 @@ Gem::Specification.new do |s|
     "test/jeweler/test_version_helper.rb",
     "test/shoulda_macros/jeweler_macros.rb",
     "test/test_helper.rb",
-    "test/test_jeweler.rb",
-    "tmp/existing-project-with-version-plaintext/VERSION"
+    "test/test_jeweler.rb"
   ]
   s.homepage = %q{http://github.com/technicalpickles/jeweler}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
-  s.summary = %q{Simple and opinionated helper for creating Rubygem projects on GitHub}
+  s.rubygems_version = %q{1.3.6}
+  s.summary = %q{Opinionated tool for creating and managing RubyGem projects}
   s.test_files = [
     "test/fixtures/bar/lib/foo_the_ultimate_lib.rb",
     "test/fixtures/existing-project-with-version-constant/lib/existing_project_with_version.rb",
@@ -193,6 +210,9 @@ Gem::Specification.new do |s|
     "test/fixtures/existing-project-with-version-yaml/lib/existing_project_with_version.rb",
     "test/fixtures/existing-project-with-version-yaml/test/existing_project_with_version_test.rb",
     "test/fixtures/existing-project-with-version-yaml/test/test_helper.rb",
+    "test/jeweler/commands/ghpages/test_base.rb",
+    "test/jeweler/commands/ghpages/test_release_to_ghpages.rb",
+    "test/jeweler/commands/ghpages/test_remove_from_ghpages.rb",
     "test/jeweler/commands/test_build_gem.rb",
     "test/jeweler/commands/test_install_gem.rb",
     "test/jeweler/commands/test_release_to_gemcutter.rb",
@@ -228,44 +248,53 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<git>, [">= 1.2.5"])
       s.add_runtime_dependency(%q<gemcutter>, [">= 0.1.0"])
       s.add_runtime_dependency(%q<bundler>, [">= 0.9.5"])
+      s.add_runtime_dependency(%q<thor>, ["~> 0.13.4"])
+      s.add_runtime_dependency(%q<grancher>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
       s.add_development_dependency(%q<rr>, [">= 0"])
       s.add_development_dependency(%q<mocha>, [">= 0"])
       s.add_development_dependency(%q<redgreen>, [">= 0"])
-      s.add_development_dependency(%q<devver-construct>, [">= 0"])
+      s.add_development_dependency(%q<test-construct>, [">= 0"])
       s.add_development_dependency(%q<yard>, [">= 0"])
       s.add_development_dependency(%q<cucumber>, [">= 0"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
+      s.add_development_dependency(%q<ruby-debug>, [">= 0"])
     else
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<git>, [">= 1.2.5"])
       s.add_dependency(%q<gemcutter>, [">= 0.1.0"])
       s.add_dependency(%q<bundler>, [">= 0.9.5"])
+      s.add_dependency(%q<thor>, ["~> 0.13.4"])
+      s.add_dependency(%q<grancher>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
       s.add_dependency(%q<rr>, [">= 0"])
       s.add_dependency(%q<mocha>, [">= 0"])
       s.add_dependency(%q<redgreen>, [">= 0"])
-      s.add_dependency(%q<devver-construct>, [">= 0"])
+      s.add_dependency(%q<test-construct>, [">= 0"])
       s.add_dependency(%q<yard>, [">= 0"])
       s.add_dependency(%q<cucumber>, [">= 0"])
       s.add_dependency(%q<rcov>, [">= 0"])
+      s.add_dependency(%q<ruby-debug>, [">= 0"])
     end
   else
     s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<git>, [">= 1.2.5"])
     s.add_dependency(%q<gemcutter>, [">= 0.1.0"])
     s.add_dependency(%q<bundler>, [">= 0.9.5"])
+    s.add_dependency(%q<thor>, ["~> 0.13.4"])
+    s.add_dependency(%q<grancher>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
     s.add_dependency(%q<rr>, [">= 0"])
     s.add_dependency(%q<mocha>, [">= 0"])
     s.add_dependency(%q<redgreen>, [">= 0"])
-    s.add_dependency(%q<devver-construct>, [">= 0"])
+    s.add_dependency(%q<test-construct>, [">= 0"])
     s.add_dependency(%q<yard>, [">= 0"])
     s.add_dependency(%q<cucumber>, [">= 0"])
     s.add_dependency(%q<rcov>, [">= 0"])
+    s.add_dependency(%q<ruby-debug>, [">= 0"])
   end
 end
 
