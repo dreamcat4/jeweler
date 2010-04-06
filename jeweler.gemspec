@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Nichols"]
-  s.date = %q{2010-04-04}
+  s.date = %q{2010-04-06}
   s.default_executable = %q{jeweler}
   s.description = %q{Simple and opinionated helper for creating Rubygem projects on GitHub}
   s.email = %q{josh@technicalpickles.com}
@@ -249,7 +249,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<gemcutter>, [">= 0.1.0"])
       s.add_runtime_dependency(%q<bundler>, [">= 0.9.5"])
       s.add_runtime_dependency(%q<thor>, ["~> 0.13.4"])
-      s.add_runtime_dependency(%q<grancher>, [">= 0"])
+      s.add_runtime_dependency(%q<grancher>, [">= 0.1.1"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
       s.add_development_dependency(%q<rr>, [">= 0"])
@@ -266,7 +266,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<gemcutter>, [">= 0.1.0"])
       s.add_dependency(%q<bundler>, [">= 0.9.5"])
       s.add_dependency(%q<thor>, ["~> 0.13.4"])
-      s.add_dependency(%q<grancher>, [">= 0"])
+      s.add_dependency(%q<grancher>, [">= 0.1.1"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
       s.add_dependency(%q<rr>, [">= 0"])
@@ -284,7 +284,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<gemcutter>, [">= 0.1.0"])
     s.add_dependency(%q<bundler>, [">= 0.9.5"])
     s.add_dependency(%q<thor>, ["~> 0.13.4"])
-    s.add_dependency(%q<grancher>, [">= 0"])
+    s.add_dependency(%q<grancher>, [">= 0.1.1"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
     s.add_dependency(%q<rr>, [">= 0"])

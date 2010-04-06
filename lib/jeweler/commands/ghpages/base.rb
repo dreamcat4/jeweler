@@ -1,34 +1,5 @@
 require 'grancher'
 
-# To be removed when grancher is fixed, Ref:
-# http://github.com/judofyr/grancher/issues/issue/4, 
-# http://github.com/judofyr/grancher/issues/issue/5
-class Grancher
-  attr_accessor :refspec
-
-  def keep(*files)
-    @keep.concat(files.flatten)
-  end
-
-  def refspec=(refspec)
-    if refspec =~ /^\+?(.*)\:/
-      @branch = $1
-    else
-      raise ArgumentError, "refspec syntax error"
-    end
-    @refspec = refspec
-  end
-
-  def branch=(branch)
-    @refspec = "#{branch}:refs/heads/#{branch}"
-    @branch = branch
-  end
-
-  def push
-    gash.send(:git, 'push', @push_to, @refspec)
-  end
-end
-
 class Jeweler
   module Commands
     module Ghpages
