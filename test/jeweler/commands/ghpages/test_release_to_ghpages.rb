@@ -40,7 +40,7 @@ class Jeweler
 
               stub(@grancher).commit { true }
               stub(@grancher).push { true }
-              stub(@grancher).message=("Documentation update by user")
+              stub(@grancher).message=("Documentation update")
 
               @ghpages_task = Object.new
               stub(@ghpages_task).user_github_com { false }
@@ -71,7 +71,7 @@ class Jeweler
           		stub(@grancher).directory("dir2",nil) { true }
 
               @output = Object.new
-              stub(@output).puts("Pushing repo's gh-pages to http://user.github.com/repo") { true }
+              stub(@output).puts("Pushed gh-pages from user/repo") { true }
 
               @command = Jeweler::Commands::Ghpages::ReleaseToGhpages.build_for(@jeweler, @ghpages_task)
               stub(@command).setup_grancher_return_ghpages_url(@grancher) { "http://user.github.com/repo" }
@@ -132,7 +132,7 @@ class Jeweler
                 end
 
                 assert_received(@grancher) do |should_receive| 
-                  should_receive.message("Documentation update by user")
+                  should_receive.message("Documentation update")
               		should_receive.file("file1","file1") { true }
               		should_receive.file("file2",nil) { true }
               		should_receive.directory("dir1","dir1") { true }
@@ -142,7 +142,7 @@ class Jeweler
                 end
 
                 assert_received(@output) do |should_receive| 
-                  should_receive.puts("Pushing repo's gh-pages to http://user.github.com/repo") { true }
+                  should_receive.puts("Pushed gh-pages from user/repo") { true }
                 end
 
                 assert_received(@dir) do |should_receive| 

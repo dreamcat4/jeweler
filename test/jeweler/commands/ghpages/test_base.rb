@@ -57,7 +57,7 @@ class Jeweler
                 stub(@command).gh_user { "user" }
                 stub(@command).gh_token { "token" }
 
-                @github_http_post_args = { 'login' => "user", 'token' => "token", 'homepage' => "homepage" }
+                @github_http_post_args = { 'login' => "user", 'token' => "token", 'values[homepage]' => "homepage" }
 
                 stub(Net::HTTP).post_form(@uri,@github_http_post_args) { true }
                 @command.set_repo_homepage("homepage")
@@ -114,7 +114,7 @@ class Jeweler
                 stub(@repo).dir { @dir }
                 stub(@dir).path { "/path/to/user/repo" }
                 stub(@repo).remotes { [@remote] }
-                stub(@command).new_github_repo("user.github.com", "Github Pages pushed from http://github.com/user/repo", "http://user.github.com") { true }
+                stub(@command).new_github_repo("user.github.com", "Gh-pages pushed from user/repo", "http://user.github.com") { true }
               end
  
               context "run happily" do
@@ -200,7 +200,7 @@ class Jeweler
                     assert_received(@command) do |should_receive| 
                       should_receive.repo { @repo }
                       should_receive.gh_account { "user" }
-                      should_receive.new_github_repo("user.github.com", "Github Pages pushed from http://github.com/user/repo", "http://user.github.com") { true }
+                      should_receive.new_github_repo("user.github.com", "Gh-pages pushed from user/repo", "http://user.github.com") { true }
                     end
 
                     assert_received(@repo) do |should_receive| 

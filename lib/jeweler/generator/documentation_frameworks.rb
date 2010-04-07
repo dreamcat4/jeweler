@@ -40,7 +40,9 @@ end
 __END__
 @@ yard_rakefile_snippet
 require 'yard'
-YARD::Rake::YardocTask.new
+YARD::Rake::YardocTask.new do |t|
+  t.after = lambda { `touch doc/.nojekyll` }
+end
 @@ rdoc_rakefile_snippet
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|

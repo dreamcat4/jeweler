@@ -7,7 +7,7 @@ group :runtime do
   gem "gemcutter", ">= 0.1.0"
   gem "bundler", ">= 0.9.5"
   gem "thor", "~> 0.13.4"
-  gem "grancher", ">= 0.1.1"
+  gem "grancher", ">= 0.1.4"
 end
 
 group :development do

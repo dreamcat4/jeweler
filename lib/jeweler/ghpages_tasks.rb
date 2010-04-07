@@ -117,7 +117,8 @@ class Jeweler
         desc "Release #{doc_task} documentation to Github Pages"
         task :release => "ghpages:release:#{doc_task}"
 
-        task :takedown do
+        desc "Takedown / remove documentation from Github Pages"
+        task :unrelease do
           jeweler.remove_docs_from_ghpages(self)
         end
       end

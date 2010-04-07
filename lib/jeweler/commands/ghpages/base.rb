@@ -63,15 +63,16 @@ class Jeweler
 
         def set_repo_homepage(url)
           Net::HTTP.post_form URI.parse("http://github.com/api/v2/yaml/repos/show/#{gh_account}/#{gh_repo}"),
-            'login' => gh_user, 'token' => gh_token, 'homepage' => url
+            'login' => gh_user, 'token' => gh_token, 'values[homepage]' => url
         end
         
         def setup_grancher_return_ghpages_url(grancher)
           grancher.repo = repo.dir.path
           grancher.keep(ghpages_task.keep_files) unless ghpages_task.keep_files.empty?
 
+          ghpages_user_domain = "#{gh_account}.github.com"
+
           if ghpages_task.user_github_com
-            ghpages_user_domain = "#{gh_account}.github.com"
 
             ghpages_url = "http://#{ghpages_user_domain}"
             grancher.push_to = ghpages_user_domain
@@ -82,7 +83,7 @@ class Jeweler
               output.puts "Adding remote #{ghpages_user_domain} to repo"
               user_github_com_uri = "git@github.com:#{gh_account}/#{ghpages_user_domain}.git"
               grancher.gash.send(:git, 'remote', 'add', ghpages_user_domain, user_github_com_uri)
-              new_github_repo(ghpages_user_domain, "Github Pages pushed from http://github.com/#{gh_account}/#{gh_repo}", ghpages_url)
+              new_github_repo(ghpages_user_domain, "Gh-pages pushed from #{gh_account}/#{gh_repo}", ghpages_url)
             end
           else
             ghpages_url = "http://#{ghpages_user_domain}/#{gh_repo}"
