@@ -14,11 +14,6 @@ class Jeweler
           end
         end
 
-        def clean_staging_area?
-          status = repo.status
-          status.added.empty? && status.deleted.empty? && status.changed.empty?
-        end
-
         def parse_opt(args,opt)
           args = args.dup
           require 'optparse'
@@ -66,6 +61,10 @@ class Jeweler
             'login' => gh_user, 'token' => gh_token, 'values[homepage]' => url
         end
         
+        def release_tag
+          "v#{version}"
+        end
+
         def setup_grancher_return_ghpages_url(grancher)
           grancher.repo = repo.dir.path
           grancher.keep(ghpages_task.keep_files) unless ghpages_task.keep_files.empty?
@@ -106,7 +105,6 @@ class Jeweler
  
         def run
           raise "Remote origin doesnt seem to be a Github url" unless repo.remote('origin').url =~ /github\.com/
-          raise "Hey buddy, try committing them files first" unless clean_staging_area?
         end
 
       end

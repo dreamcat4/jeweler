@@ -40,10 +40,10 @@ class Jeweler
 
               stub(@grancher).commit { true }
               stub(@grancher).push { true }
-              stub(@grancher).message=("Removing gh-pages from http://user.github.com/repo")
+              stub(@grancher).message=("Removed docs from gh-pages")
 
               @output = Object.new
-              stub(@output).puts("Removing gh-pages from http://user.github.com/repo") { true }
+              stub(@output).puts("Removed docs from gh-pages") { true }
 
               @command = Jeweler::Commands::Ghpages::RemoveFromGhpages.build_for(@jeweler, @ghpages_task)
               stub(@command).setup_grancher_return_ghpages_url(@grancher) { "http://user.github.com/repo" }
@@ -84,7 +84,7 @@ class Jeweler
                 end
 
                 assert_received(@output) do |should_receive| 
-                  should_receive.puts("Removing gh-pages from http://user.github.com/repo") { true }
+                  should_receive.puts("Removed docs from gh-pages") { true }
                 end
 
                 assert_received(@dir) do |should_receive| 

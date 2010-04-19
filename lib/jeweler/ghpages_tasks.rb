@@ -53,6 +53,7 @@ class Jeweler
 
 
     attr_accessor :jeweler
+    attr_accessor :commit_tag
 
     def initialize
 
@@ -107,15 +108,21 @@ class Jeweler
         namespace :release do
 
           ["rdoc", "yard"].each do |doc_task|
+
             desc "Release #{doc_task} documentation to Github Pages"
-            task doc_task.to_sym => "rake:#{doc_task}" do
+            task doc_task.to_sym => "rake:#{doc_task}"
+
+            task doc_task.to_sym, [:commit_tag] do |t, args|
+              self.commit_tag = args.commit_tag
               jeweler.release_docs_to_ghpages(self)
             end
           end
         end
 
         desc "Release #{doc_task} documentation to Github Pages"
-        task :release => "ghpages:release:#{doc_task}"
+        task :release, [:commit_tag] do |t, args|
+          Rake::Task["ghpages:release:#{doc_task}"].execute(args)
+        end
 
         desc "Takedown / remove documentation from Github Pages"
         task :unrelease do
@@ -124,7 +131,9 @@ class Jeweler
       end
 
       if push_on_release
-        task :release => 'ghpages:release'
+        task :release do
+          Rake::Task['ghpages:release'].execute(Rake::TaskArguments.new([:commit_tag], [:release_tag]))
+        end
       end
 
     end

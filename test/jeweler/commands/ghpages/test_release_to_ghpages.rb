@@ -38,11 +38,13 @@ class Jeweler
 
               ::Grancher.instance @grancher
 
-              stub(@grancher).commit { true }
+              stub(@grancher).commit { "git-sha1" }
+              stub(@grancher).tag("gh-pages-v0.1.2","Regenerated docs - v0.1.2","git-sha1") { true }
               stub(@grancher).push { true }
-              stub(@grancher).message=("Documentation update")
+              stub(@grancher).message=("Regenerated docs - v0.1.2")
 
               @ghpages_task = Object.new
+              stub(@ghpages_task).commit_tag { :release_tag }
               stub(@ghpages_task).user_github_com { false }
               stub(@ghpages_task).set_repo_homepage { true }
               stub(@ghpages_task).map_paths do
@@ -71,7 +73,10 @@ class Jeweler
           		stub(@grancher).directory("dir2",nil) { true }
 
               @output = Object.new
-              stub(@output).puts("Pushed gh-pages from user/repo") { true }
+              stub(@output).puts("Regenerated docs - v0.1.2") { true }
+              stub(@output).puts("Tagging gh-pages-v0.1.2") { true }
+              stub(@output).puts("Pushing gh-pages-v0.1.2") { true }
+              stub(@output).puts("gh-pages - Done.") { true }
 
               @command = Jeweler::Commands::Ghpages::ReleaseToGhpages.build_for(@jeweler, @ghpages_task)
               stub(@command).setup_grancher_return_ghpages_url(@grancher) { "http://user.github.com/repo" }
@@ -84,6 +89,7 @@ class Jeweler
               stub(@dir).path { "/path/to/user/repo" }
               stub(@origin).url { "git@github.com/user/repo" }
 
+              stub(@command).release_tag { "v0.1.2" }
               stub(@command).repo { @repo }
               stub(@command).grancher { @grancher }
               stub(@command).ghpages_task { @ghpages_task }
@@ -137,12 +143,16 @@ class Jeweler
               		should_receive.file("file2",nil) { true }
               		should_receive.directory("dir1","dir1") { true }
               		should_receive.directory("dir2",nil) { true }
-                  should_receive.commit { true }              		
+                  should_receive.commit { "git-sha1" }
+                  should_receive.tag("gh-pages-v0.1.2","Regenerated docs - v0.1.2","git-sha1") { true }
                   should_receive.push { true }
                 end
 
                 assert_received(@output) do |should_receive| 
-                  should_receive.puts("Pushed gh-pages from user/repo") { true }
+                  should_receive.puts("Regenerated docs - v0.1.2") { true }
+                  should_receive.puts("Tagging gh-pages-v0.1.2") { true }
+                  should_receive.puts("Pushing gh-pages-v0.1.2") { true }
+                  should_receive.puts("gh-pages - Done.") { true }
                 end
 
                 assert_received(@dir) do |should_receive| 

@@ -9,7 +9,6 @@ class Jeweler
           context "Jeweler::Commands::Ghpages::Base" do
             setup do
               @command = Jeweler::Commands::Ghpages::Base.build_for(@jeweler, @ghpages_task)
-              stub(@command).clean_staging_area? { true }
 
               @origin = Object.new
               stub(@repo).remote('origin') { @origin }
@@ -75,6 +74,18 @@ class Jeweler
 
                 assert_received(Net::HTTP) do |should_receive| 
                   should_receive.post_form(@uri, @github_http_post_args) { true }
+                end
+              end
+            end
+
+            context "Jeweler::Commands::Ghpages::Base, def release_tag()" do
+              setup do
+                stub(@command).version() { "0.1.2" }
+                @command.release_tag
+              end
+              should "return the current version" do
+                assert_received(@command) do |should_receive|
+                  should_receive.version { "0.1.2" }
                 end
               end
             end
@@ -228,18 +239,9 @@ class Jeweler
             end
 
             context "Jeweler::Commands::Ghpages::Base, def run()" do
-              context "with a clean staging area, and an origin which is a valid github remote" do
+              context "with an origin which is a valid github remote" do
                 should "not raise any error" do
                   assert_nothing_raised do
-                    @command.run
-                  end
-                end
-              end
-
-              context "with an unclean staging area" do
-                should 'raise an error' do
-                  stub(@command).clean_staging_area? { false }
-                  assert_raises RuntimeError, /try commiting/i do
                     @command.run
                   end
                 end
