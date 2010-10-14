@@ -1,4 +1,4 @@
-Feature: generated Gemfiel
+Feature: generated Gemfile
   In order to start a new gem
   A user should be able to
   generate a Gemfile
@@ -65,6 +65,11 @@ Feature: generated Gemfiel
     Given I want to use yard instead of rdoc
     When I generate a testunit project named 'the-perfect-gem' that is 'zomg, so good'
     Then 'Gemfile' has a development dependency on 'yard'
+
+  Scenario: ghpages
+    Given I want ghpages
+    When I generate a testunit project named 'the-perfect-gem' that is 'zomg, so good'
+    Then 'Gemfile' has a development dependency on 'grancher'
 
   Scenario: shindo
     When I generate a shindo project named 'the-perfect-gem' that is 'zomg, so good'

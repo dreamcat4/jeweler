@@ -47,6 +47,13 @@ Given /^I want to use rdoc instead of yard$/ do
   @documentation_framework = "rdoc"
 end
 
+Given /^I do not want ghpages$/ do
+  @ghpages = false
+end
+
+Given /^I want ghpages$/ do
+  @ghpages = true
+end
 
 Given /^I intend to test with (\w+)$/ do |testing_framework|
   @testing_framework = testing_framework.to_sym
@@ -68,7 +75,7 @@ Given /^I have configured git sanely$/ do
 end
 
 Given /^I set JEWELER_OPTS env variable to "(.*)"$/ do |val|
-  ENV['JEWELER_OPTS'] = val
+  @env_jeweler_opts = val
 end
 
 When /^I generate a (.*)project named '((?:\w|-|_)+)' that is '([^']*)'$/ do |testing_framework, name, summary|
@@ -85,6 +92,7 @@ When /^I generate a (.*)project named '((?:\w|-|_)+)' that is '([^']*)' and desc
     @testing_framework = testing_framework.to_sym
   end
 
+  ENV['JEWELER_OPTS'] = "#{@env_jeweler_opts}"
 
   arguments = ['--directory',
                "#{@working_dir}/#{@name}",
@@ -101,6 +109,7 @@ When /^I generate a (.*)project named '((?:\w|-|_)+)' that is '([^']*)' and desc
                 else nil
                 end,
                 @documentation_framework ? "--#{@documentation_framework}" : nil,
+                @ghpages ? "--ghpages" : nil,
                 @name].compact
 
 
@@ -153,12 +162,23 @@ Then /^'(.*)' is ignored by git$/ do |git_ignore|
   assert_match git_ignore, @gitignore_content
 end
 
+Then /^Rakefile has ([^\']*) for the (.*) (.*)$/ do |value, task_class, field|
+  @rakefile_content ||= File.read(File.join(@working_dir, @name, 'Rakefile'))
+  block_variable, task_block = yank_task_info(@rakefile_content, task_class)
+  # raise "Found in #{task_class}: #{block_variable.inspect}: #{task_block.inspect}"
+
+  message = "Expected #{block_variable}.#{field} to be #{value}, but was not:\n#{task_block}"
+  assert_block message do
+    task_block =~ /#{block_variable}\.#{field}\s*=\s*#{Regexp.escape(value)}/
+  end
+end
+
 Then /^Rakefile has '(.*)' for the (.*) (.*)$/ do |value, task_class, field|
   @rakefile_content ||= File.read(File.join(@working_dir, @name, 'Rakefile'))
   block_variable, task_block = yank_task_info(@rakefile_content, task_class)
   #raise "Found in #{task_class}: #{block_variable.inspect}: #{task_block.inspect}"
 
-  assert_match /#{block_variable}\.#{field} = (%Q\{|"|')#{Regexp.escape(value)}(\}|"|')/, task_block
+  assert_match /#{block_variable}\.#{field}\s*=\s*(%Q\{|"|')#{Regexp.escape(value)}(\}|"|')/, task_block
 end
 
 Then /^Rakefile has '(.*)' in the Rcov::RcovTask libs$/ do |libs|

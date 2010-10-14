@@ -81,5 +81,25 @@ Rake::RDocTask.new do |rdoc|
 end
 <% when :yard %>
 require 'yard'
-YARD::Rake::YardocTask.new
+YARD::Rake::YardocTask.new do |t|
+  t.after = lambda { `touch doc/.nojekyll` }
+end
 <% end %>
+
+<% if should_use_ghpages %>
+Jeweler::GhpagesTasks.new do |ghpages|
+  ghpages.push_on_release   = <%= ghpages_tasks.push_on_release %>
+  ghpages.set_repo_homepage = <%= ghpages_tasks.set_repo_homepage %>
+  ghpages.user_github_com   = <%= ghpages_tasks.user_github_com %>
+  ghpages.doc_task    = "<%= ghpages_tasks.doc_task %>"
+  ghpages.keep_files  = <%= ghpages_tasks.keep_files.inspect %>
+<% if ghpages_tasks.map_paths.empty? %>
+  ghpages.map_paths   = {}
+<% else %>
+  ghpages.map_paths   = {
+    <% ghpages_tasks.map_paths.each do |k,v| %>"<%= k %>" => "<%= v %>",<% end %>
+  }
+<% end %>
+end
+<% end %>
+

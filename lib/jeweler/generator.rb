@@ -31,6 +31,7 @@ class Jeweler
     require 'jeweler/generator/application'
 
     require 'jeweler/generator/github_mixin'
+    require 'jeweler/generator/ghpages_mixin'
 
     require 'jeweler/generator/bacon_mixin'
     require 'jeweler/generator/micronaut_mixin'
@@ -49,8 +50,10 @@ class Jeweler
                   :description, :project_name, :github_username, :github_token,
                   :repo, :should_create_remote_repo, 
                   :testing_framework, :documentation_framework,
+                  :ghpages_tasks,
                   :should_use_cucumber, :should_use_bundler,
                   :should_setup_rubyforge, :should_use_reek, :should_use_roodi,
+                  :should_use_ghpages,
                   :development_dependencies,
                   :options,
                   :git_remote
@@ -91,6 +94,7 @@ class Jeweler
       self.should_use_roodi       = options[:use_roodi]
       self.should_setup_rubyforge = options[:rubyforge]
       self.should_use_bundler     = options[:use_bundler]
+      self.should_use_ghpages     = options[:ghpages]
 
       development_dependencies << ["cucumber", ">= 0"] if should_use_cucumber
 
@@ -112,6 +116,7 @@ class Jeweler
       raise NoGitUserEmail unless self.user_email
 
       extend GithubMixin
+      extend GhpagesMixin if self.should_use_ghpages
     end
 
     def run
@@ -273,7 +278,7 @@ class Jeweler
         end
       end
     end
-    
+
     def create_and_push_repo
       Net::HTTP.post_form URI.parse('http://github.com/api/v2/yaml/repos/create'),
                                 'login' => github_username,

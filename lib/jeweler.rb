@@ -22,6 +22,7 @@ class Jeweler
   autoload :Tasks,          'jeweler/tasks'
   autoload :RubygemsDotOrgTasks,  'jeweler/rubygems_dot_org_tasks'
   autoload :GemcutterTasks, 'jeweler/gemcutter_tasks'
+  autoload :GhpagesTasks,   'jeweler/ghpages_tasks'
   autoload :RubyforgeTasks, 'jeweler/rubyforge_tasks'
   autoload :Specification,  'jeweler/specification'
 
@@ -122,6 +123,14 @@ class Jeweler
     command.build = build
 
     command.run
+  end
+
+  def release_docs_to_ghpages(ghpages_task)
+    Jeweler::Commands::Ghpages::ReleaseToGhpages.build_for(self, ghpages_task).run
+  end
+
+  def remove_docs_from_ghpages(ghpages_task)
+    Jeweler::Commands::Ghpages::RemoveFromGhpages.build_for(self, ghpages_task).run
   end
 
   def release_gemspec

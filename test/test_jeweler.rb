@@ -145,6 +145,28 @@ class TestJeweler < Test::Unit::TestCase
     jeweler.release_gemspec
   end
 
+  should "build and run release docs to ghpages command when running release_docs_to_ghpages" do
+    jeweler = build_jeweler
+    ghpages_task = Jeweler::GhpagesTasks.new
+
+    command = Object.new
+    mock(command).run
+    mock(Jeweler::Commands::Ghpages::ReleaseToGhpages).build_for(jeweler,ghpages_task) { command }
+
+    jeweler.release_docs_to_ghpages(ghpages_task)
+  end
+
+  should "build and run remove docs from ghpages command when running remove_docs_from_ghpages" do
+    jeweler = build_jeweler
+    ghpages_task = Jeweler::GhpagesTasks.new
+    
+    command = Object.new
+    mock(command).run
+    mock(Jeweler::Commands::Ghpages::RemoveFromGhpages).build_for(jeweler,ghpages_task) { command }
+
+    jeweler.remove_docs_from_ghpages(ghpages_task) 
+  end
+
   should "build and run release to git command when running release_to_git" do
     jeweler = build_jeweler
 

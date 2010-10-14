@@ -140,6 +140,10 @@ class Jeweler
             self[:documentation_framework] = :rdoc
           end
 
+          o.on('--ghpages', 'push documentation to ghpages') do
+            self[:ghpages] = true
+          end
+
           o.on_tail('-h', '--help', 'display this help and exit') do
             self[:show_help] = true
           end

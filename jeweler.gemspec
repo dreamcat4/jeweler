@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Nichols"]
-  s.date = %q{2010-10-12}
+  s.date = %q{2010-10-14}
   s.default_executable = %q{jeweler}
   s.description = %q{Simple and opinionated helper for creating Rubygem projects on GitHub}
   s.email = %q{josh@technicalpickles.com}
@@ -53,6 +53,9 @@ Gem::Specification.new do |s|
     "lib/jeweler/commands.rb",
     "lib/jeweler/commands/build_gem.rb",
     "lib/jeweler/commands/check_dependencies.rb",
+    "lib/jeweler/commands/ghpages/base.rb",
+    "lib/jeweler/commands/ghpages/release_to_ghpages.rb",
+    "lib/jeweler/commands/ghpages/remove_from_ghpages.rb",
     "lib/jeweler/commands/install_gem.rb",
     "lib/jeweler/commands/release_gemspec.rb",
     "lib/jeweler/commands/release_to_git.rb",
@@ -70,6 +73,7 @@ Gem::Specification.new do |s|
     "lib/jeweler/generator.rb",
     "lib/jeweler/generator/application.rb",
     "lib/jeweler/generator/bacon_mixin.rb",
+    "lib/jeweler/generator/ghpages_mixin.rb",
     "lib/jeweler/generator/github_mixin.rb",
     "lib/jeweler/generator/micronaut_mixin.rb",
     "lib/jeweler/generator/minitest_mixin.rb",
@@ -82,6 +86,7 @@ Gem::Specification.new do |s|
     "lib/jeweler/generator/testspec_mixin.rb",
     "lib/jeweler/generator/testunit_mixin.rb",
     "lib/jeweler/generator/yard_mixin.rb",
+    "lib/jeweler/ghpages_tasks.rb",
     "lib/jeweler/rubyforge_tasks.rb",
     "lib/jeweler/rubygems_dot_org_tasks.rb",
     "lib/jeweler/rubygems_tasks.rb",
@@ -154,6 +159,9 @@ Gem::Specification.new do |s|
     "test/fixtures/existing-project-with-version-yaml/test/existing_project_with_version_test.rb",
     "test/fixtures/existing-project-with-version-yaml/test/test_helper.rb",
     "test/geminstaller.yml",
+    "test/jeweler/commands/ghpages/test_base.rb",
+    "test/jeweler/commands/ghpages/test_release_to_ghpages.rb",
+    "test/jeweler/commands/ghpages/test_remove_from_ghpages.rb",
     "test/jeweler/commands/test_build_gem.rb",
     "test/jeweler/commands/test_install_gem.rb",
     "test/jeweler/commands/test_release_to_gemcutter.rb",
@@ -194,6 +202,9 @@ Gem::Specification.new do |s|
     "test/fixtures/existing-project-with-version-yaml/lib/existing_project_with_version.rb",
     "test/fixtures/existing-project-with-version-yaml/test/existing_project_with_version_test.rb",
     "test/fixtures/existing-project-with-version-yaml/test/test_helper.rb",
+    "test/jeweler/commands/ghpages/test_base.rb",
+    "test/jeweler/commands/ghpages/test_release_to_ghpages.rb",
+    "test/jeweler/commands/ghpages/test_remove_from_ghpages.rb",
     "test/jeweler/commands/test_build_gem.rb",
     "test/jeweler/commands/test_install_gem.rb",
     "test/jeweler/commands/test_release_to_gemcutter.rb",
@@ -228,6 +239,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rake>, [">= 0"])
       s.add_runtime_dependency(%q<git>, [">= 1.2.5"])
       s.add_runtime_dependency(%q<bundler>, ["~> 1.0.0"])
+      s.add_runtime_dependency(%q<grancher>, [">= 0.1.5"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
       s.add_development_dependency(%q<rr>, [">= 0"])
@@ -245,6 +257,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<git>, [">= 1.2.5"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
+      s.add_dependency(%q<grancher>, [">= 0.1.5"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
       s.add_dependency(%q<rr>, [">= 0"])
@@ -263,6 +276,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<git>, [">= 1.2.5"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
+    s.add_dependency(%q<grancher>, [">= 0.1.5"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<mhennemeyer-output_catcher>, [">= 0"])
     s.add_dependency(%q<rr>, [">= 0"])

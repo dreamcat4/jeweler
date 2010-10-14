@@ -9,6 +9,12 @@ class Jeweler
     autoload :ValidateGemspec, 'jeweler/commands/validate_gemspec'
     autoload :WriteGemspec, 'jeweler/commands/write_gemspec'
 
+    module Ghpages
+      autoload :Base, 'jeweler/commands/ghpages/base'
+      autoload :ReleaseToGhpages, 'jeweler/commands/ghpages/release_to_ghpages'
+      autoload :RemoveFromGhpages, 'jeweler/commands/ghpages/remove_from_ghpages'
+    end
+
     module Version
       autoload :Base,      'jeweler/commands/version/base'
       autoload :BumpMajor, 'jeweler/commands/version/bump_major'
